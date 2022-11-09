@@ -7,6 +7,7 @@ type CreateContextFn<TRouter extends AnyRouter> = (
   APIContext: APIContext
 ) => inferRouterContext<TRouter> | Promise<inferRouterContext<TRouter>>;
 
+// Based on the adapter in astro-trpc package, but with a few changes for trpc v10
 export function createAstroApiHandler<TRouter extends AnyRouter>(opts: {
   router: TRouter;
   createContext: CreateContextFn<TRouter>;
