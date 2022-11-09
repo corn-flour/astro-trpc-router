@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
-import { trpc } from "../utils/trpc";
+import { client, trpc } from "../utils/trpc";
 import {
   createReactRouter,
   createRouteConfig,
@@ -90,9 +90,23 @@ const routeConfig = createRouteConfig().createChildren((createRoute) => [
   createRoute({
     path: "posts",
     element: <Posts />,
+    loader: async () => {
+      if (!queryClient.getQueryData(["posts"])) {
+        await queryClient.prefetchQuery(["posts"], () => client.posts.query());
+      }
+      return {};
+    },
   }).createChildren((createRoute) => [
     createRoute({
       path: ":id",
+      loader: async ({ params: { id } }) => {
+        if (!queryClient.getQueryData(["posts", id])) {
+          await queryClient.prefetchQuery(["posts", id], () =>
+            client.post.query({ id })
+          );
+        }
+        return {};
+      },
       element: <Post />,
     }),
   ]),
