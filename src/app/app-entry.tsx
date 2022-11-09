@@ -8,6 +8,7 @@ import {
   Outlet,
   RouterProvider,
 } from "@tanstack/react-router";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 const queryClient = new QueryClient();
 
 const App = () => {
@@ -30,6 +31,7 @@ const App = () => {
           </nav>
           <Outlet />
         </RouterProvider>
+        <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
     </trpc.Provider>
   );
@@ -99,15 +101,15 @@ const routeConfig = createRouteConfig().createChildren((createRoute) => [
   }).createChildren((createRoute) => [
     createRoute({
       path: ":id",
+      element: <Post />,
       loader: async ({ params: { id } }) => {
-        if (!queryClient.getQueryData(["posts", id])) {
-          await queryClient.prefetchQuery(["posts", id], () =>
+        if (!queryClient.getQueryData([["post"], { id }])) {
+          await queryClient.prefetchQuery([["post"], { id }], () =>
             client.post.query({ id })
           );
         }
         return {};
       },
-      element: <Post />,
     }),
   ]),
 ]);
