@@ -1,5 +1,8 @@
 ---
 import App from "../app/app-entry";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<App client:only="react" />
+<Layout title="App">
+  <App client:only="react" />
+</Layout>

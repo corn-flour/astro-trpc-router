@@ -25,11 +25,25 @@ const App = () => {
     <trpc.Provider client={trpcClient} queryClient={queryClient}>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router}>
-          <nav>
-            <router.Link to="/">Home</router.Link>
-            <router.Link to="/posts">Posts</router.Link>
-          </nav>
-          <Outlet />
+          <div className="max-w-7xl w-[95%] mx-auto my-16">
+            <nav className="flex gap-4 mb-8">
+              <router.Link
+                to="/"
+                activeProps={{
+                  className: "text-violet-700 font-bold",
+                }}>
+                Home
+              </router.Link>
+              <router.Link
+                to="/posts"
+                activeProps={{
+                  className: "text-violet-700 font-bold",
+                }}>
+                Posts
+              </router.Link>
+            </nav>
+            <Outlet />
+          </div>
         </RouterProvider>
         <ReactQueryDevtools initialIsOpen={false} />
       </QueryClientProvider>
@@ -42,31 +56,38 @@ const AppEntry = () => {
 
   if (!data) return <div>waiting...</div>;
 
-  return <p>Test trpc: {data}</p>;
+  return (
+    <h1 className="text-4xl font-bold text-slate-700">Test trpc: {data}</h1>
+  );
 };
 
 const Posts = () => {
   const { data: posts } = trpc.posts.useQuery();
   if (!posts) return <div>waiting...</div>;
   return (
-    <>
-      <div>
-        <h1>Posts</h1>
-        {posts?.map((post) => (
-          <router.Link
-            key={post.id}
-            to="/posts/:id"
-            params={{
-              id: String(post.id),
-            }}>
-            {post.title}
-          </router.Link>
-        ))}
+    <div className="flex gap-16 flex-col lg:flex-row lg:items-center">
+      <div className="flex-1 space-y-5">
+        <h1 className="text-4xl font-bold text-slate-700">Posts</h1>
+        <div className="flex flex-col gap-2">
+          {posts?.map((post) => (
+            <router.Link
+              key={post.id}
+              to="/posts/:id"
+              activeProps={{
+                className: "text-violet-700 font-bold",
+              }}
+              params={{
+                id: String(post.id),
+              }}>
+              {post.title}
+            </router.Link>
+          ))}
+        </div>
       </div>
-      <div>
+      <div className="flex-[2]">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 
@@ -78,8 +99,8 @@ const Post = () => {
   if (!post) return <div>waiting...</div>;
   return (
     <div>
-      <h2>{post.title}</h2>
-      <p>{post.body}</p>
+      <h2 className="text-3xl mb-8 text-slate-700 font-bold">{post.title}</h2>
+      <p className="text-slate-700">{post.body}</p>
     </div>
   );
 };
