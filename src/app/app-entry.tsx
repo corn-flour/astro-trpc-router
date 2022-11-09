@@ -31,6 +31,9 @@ const App = () => {
                 to="/"
                 activeProps={{
                   className: "text-violet-700 font-bold",
+                }}
+                inactiveProps={{
+                  className: "text-slate-700",
                 }}>
                 Home
               </router.Link>
@@ -38,6 +41,9 @@ const App = () => {
                 to="/posts"
                 activeProps={{
                   className: "text-violet-700 font-bold",
+                }}
+                inactiveProps={{
+                  className: "text-slate-700",
                 }}>
                 Posts
               </router.Link>
@@ -75,6 +81,9 @@ const Posts = () => {
               to="/posts/:id"
               activeProps={{
                 className: "text-violet-700 font-bold",
+              }}
+              inactiveProps={{
+                className: "text-slate-700",
               }}
               params={{
                 id: String(post.id),
